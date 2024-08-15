@@ -1,45 +1,76 @@
-<script setup>
-import * as THREE from 'three';
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setAnimationLoop(animate);
-document.body.appendChild(renderer.domElement);
-
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
-
-camera.position.z = 5;
-
-function animate() {
-
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-
-  renderer.render(scene, camera);
-
-}
-</script>
-
 <template>
-  <canvas id="3d" class="d-none d-md-block"></canvas>
-
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <p>
+    <input class="form-control" placeholder="Search icons..." @input="input" :value="keyword">
+  </p>
+  <ul class="icons">
+    <li v-for="icon in icons" :key="icon">
+      <vue-feather :type="icon"></vue-feather>
+      <span>{{ icon }}</span>
+    </li>
+  </ul>
 </template>
 
-<style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
+<script>
+import feather from 'feather-icons';
+
+const icons = Object.keys(feather.icons);
+
+export default {
+  data() {
+    return {
+      icons,
+      keyword: '',
+    };
+  },
+
+  methods: {
+    input(event) {
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        this.filter(event.target.value);
+      }, 300);
+    },
+
+    filter(value) {
+      value = value.trim().toLowerCase();
+      this.icons = icons.filter(icon => icon.indexOf(value) !== -1);
+      this.keyword = value;
+    },
+  },
+};
+</script>
+
+<style scoped>
+.icons {
+  display: grid;
+  grid-gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.icons>li {
+  background-color: #f8f8f8;
+  padding: 0.5rem 1rem;
+  transition: color 0.15s;
+}
+
+.icons>li:hover {
+  color: #0074d9;
+}
+
+.icons>li>i {
+  vertical-align: middle;
+}
+
+.icons>li>span {
+  color: gray;
+  margin-left: 0.5rem;
+  transition: color 0.15s;
+}
+
+.icons>li:hover>span {
+  color: inherit;
 }
 </style>
