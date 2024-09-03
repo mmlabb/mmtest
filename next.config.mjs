@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: "/mmtest",
-  output: "dist",
+  output: "export",
   reactStrictMode: true,
 };
 
