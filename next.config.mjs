@@ -3,7 +3,7 @@ const nextConfig = {
   basePath: "/mmtest",
   output: "export",
   reactStrictMode: true,
-  assetPrefix: "./",
+  assetPrefix: "/",
 };
 
 export default nextConfig;
